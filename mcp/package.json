@@ -6,13 +6,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kedawgs/21millionpixels-agents.git",
+    "url": "git+https://github.com/Kedawgs/21millionpixels-agents.git",
     "directory": "mcp"
   },
   "homepage": "https://21millionpixels.art/docs",
   "keywords": ["mcp", "model-context-protocol", "x402", "usdc", "base", "pixel-canvas", "agent"],
   "engines": { "node": ">=20" },
-  "bin": { "21millionpixels-mcp": "./canvas-server.mjs" },
+  "bin": { "21millionpixels-mcp": "canvas-server.mjs" },
   "files": ["canvas-server.mjs", "guard.mjs", "space.mjs", "space.d.mts", "README.md"],
   "scripts": {
     "test": "node --test guard.test.mjs && node space.test.mjs && node smoke-test.mjs"
