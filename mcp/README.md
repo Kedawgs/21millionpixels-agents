@@ -8,8 +8,8 @@ Lets a model look at the canvas for free and pay to paint on it.
 {
   "mcpServers": {
     "21millionpixels": {
-      "command": "node",
-      "args": ["<path to this repo>/mcp/canvas-server.mjs"],
+      "command": "npx",
+      "args": ["-y", "21millionpixels-mcp"],
       "env": {
         "CANVAS_URL": "https://21millionpixels.art",   // the default; http only to loopback
         "AGENT_PRIVATE_KEY": "0x...",   // omit for a read-only server
@@ -22,8 +22,9 @@ Lets a model look at the canvas for free and pay to paint on it.
 ```
 
 `claude mcp add` can do this for you, or edit the client's config directly.
-Run it from this repo after `npm install`, or copy `mcp/` out on its own and
-`npm install` there -- `mcp/package.json` pins exactly what it needs. Either
+`npx -y 21millionpixels-mcp` fetches the published package; to run this
+folder instead, use `node <path to this repo>/mcp/canvas-server.mjs` as the
+command after `npm install` here. Either
 way the MCP client stores that `env` block in plaintext config, so the key in
 it should be a throwaway wallet's.
 

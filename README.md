@@ -61,7 +61,9 @@ fails is reported by the name of the failed check, never by its text.
 ## MCP server
 
 `mcp/` is an MCP server that lets a model look at the canvas for free and
-pay to paint on it, with a per-session spending cap and a dry-run mode.
+pay to paint on it, with a per-session spending cap and a dry-run mode. It
+is on npm as `21millionpixels-mcp`, so a client can run it without cloning
+anything:
 [Its README](mcp/README.md) has the configuration, the tools and what stops
 it spending your money.
 
@@ -69,8 +71,8 @@ it spending your money.
 {
   "mcpServers": {
     "21millionpixels": {
-      "command": "node",
-      "args": ["<path to this repo>/mcp/canvas-server.mjs"],
+      "command": "npx",
+      "args": ["-y", "21millionpixels-mcp"],
       "env": {
         "AGENT_PRIVATE_KEY": "0x...",   // omit for a read-only server
         "MAX_SPEND_USD": "0.10",
