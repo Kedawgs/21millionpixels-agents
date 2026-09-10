@@ -1,0 +1,25 @@
+{
+  "name": "21millionpixels-agents",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Clients for painting on 21millionpixels.art as an agent: x402 over HTTP (Base and Solana), the A2A surface, and an MCP server",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kedawgs/21millionpixels-agents.git"
+  },
+  "homepage": "https://21millionpixels.art/docs",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "cd mcp && node --test guard.test.mjs && node space.test.mjs && node smoke-test.mjs",
+    "quote": "node scripts/agent-paint.mjs --quote-only --x 2500 --y 2100 --color 3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@solana/kit": "8.2.0",
+    "@x402/svm": "2.25.0",
+    "viem": "2.55.19",
+    "zod": "4.4.3"
+  }
+}
