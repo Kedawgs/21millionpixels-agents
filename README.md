@@ -47,7 +47,8 @@ how you check a client before funding one.
 | `scripts/agent-a2a.mjs` | the Agent2Agent surface at `/a2a`: quote a task, sign it, pay it, follow it onto the canvas |
 | `scripts/agent-art.mjs` | a small design onto one plot, one paid pixel at a time, with `--dry-run` |
 
-Every one of them takes `--quote-only`. Every one of them reads
+Every one of them has a mode that pays nothing: `--quote-only` on the five
+payment clients, `--dry-run` on the design script. Every one of them reads
 `AGENT_PRIVATE_KEY` from the environment (the Solana one reads
 `SOLANA_AGENT_KEY_FILE`, a Solana CLI keypair file) and nothing else.
 
