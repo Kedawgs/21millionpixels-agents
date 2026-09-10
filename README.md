@@ -43,6 +43,7 @@ how you check a client before funding one.
 | `scripts/agent-paint.mjs` | one pixel, x402 v1 (quote in the 402 body, payment in `X-PAYMENT`), USDC on Base |
 | `scripts/agent-paint-v2.mjs` | the same pixel over x402 v2 (`PAYMENT-REQUIRED` / `PAYMENT-SIGNATURE` headers, CAIP-2 network names) |
 | `scripts/agent-paint-solana.mjs` | one pixel or one plot, paying in USDC on Solana with Coinbase's own `@x402/svm` client; needs USDC and no SOL |
+| `scripts/agent-paint-nano.mjs` | one pixel or one plot, paying in XNO on Nano with the `@x402nano/exact` client; feeless, no gas, no fee payer. Requires the site to offer a `nano:mainnet` quote (see below) |
 | `scripts/agent-batch.mjs` | up to 100 pixels inside one 10x10 plot for one signature (`/api/agent/paint-batch`); the pixels are queued and painted at 60 a minute |
 | `scripts/agent-a2a.mjs` | the Agent2Agent surface at `/a2a`: quote a task, sign it, pay it, follow it onto the canvas |
 | `scripts/agent-art.mjs` | a small design onto one plot, one paid pixel at a time, with `--dry-run` |
@@ -50,7 +51,38 @@ how you check a client before funding one.
 Every one of them has a mode that pays nothing: `--quote-only` on the five
 payment clients, `--dry-run` on the design script. Every one of them reads
 `AGENT_PRIVATE_KEY` from the environment (the Solana one reads
-`SOLANA_AGENT_KEY_FILE`, a Solana CLI keypair file) and nothing else.
+`SOLANA_AGENT_KEY_FILE`, a Solana CLI keypair file, and the Nano one reads
+`NANO_AGENT_KEY`, a 64-character hex private key) and nothing else.
+
+## Nano (XNO)
+
+`scripts/agent-paint-nano.mjs` is the third rail. It is the same flow as the
+Solana client, but Nano differs in ways worth knowing:
+
+- **Feeless, and no fee payer.** A Nano send block is signed by the sender
+  alone, so the quote needs only `payTo` and `amount` — there is no `extra.feePayer`
+  to reconcile, unlike Solana.
+- **Proof of work per block.** Each block carries work computed over the
+  account's current frontier. The helper does this against a work server, and
+  it is the one step with meaningful latency. `NANO_WORK_GENERATION_URL` can
+  point at a dedicated server; it defaults to the RPC URL.
+- **No minimum balance beyond the payment.** An account needs the amount and
+  nothing else, so an unfunded account fails only for lack of funds.
+
+```
+NANO_AGENT_KEY=<64-hex> node scripts/agent-paint-nano.mjs --x 2500 --y 2100 --color 3
+```
+
+**Server side required.** This client cannot run until the site exposes a
+`nano:mainnet` entry in its 402 `accepts` list and verifies Nano payments.
+Against the live site today the script stops at step 1 and says so, naming the
+networks actually offered. That message, not a crash, is the intended
+behaviour until the rail exists.
+
+To test the client without spending anything, point it at any 402 that offers
+a Nano quote and pass `--allow-unfunded`: the expected outcome is a refusal
+that names insufficient funds, which proves the quote, the parse, the
+send-block construction and the work.
 
 Before signing, `mcp/guard.mjs` compares the quote against what the client
 already knows and refuses on the first mismatch: USDC on Base by address,
